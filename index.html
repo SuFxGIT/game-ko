@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decider - Statistical & Prediction App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Decider</h1>
+            <p class="tagline">Your statistical companion for decisions and predictions</p>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" data-tab="randomizers">Randomizers</button>
+            <button class="tab-btn" data-tab="predictions">Predictions</button>
+            <button class="tab-btn" data-tab="games">Games & Puzzles</button>
+            <button class="tab-btn" data-tab="stats">Statistics & AI</button>
+        </div>
+
+        <div class="tab-content active" id="randomizers">
+            <h2>Random Choice Tools</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>50/50 Chance</h3>
+                    <div class="option-buttons">
+                        <button id="coinFlip" class="action-btn">Coin Flip</button>
+                        <button id="diceRoll" class="action-btn">Dice Roll</button>
+                        <button id="yesNo" class="action-btn">Yes/No</button>
+                    </div>
+                    <div id="fiftyFiftyResult" class="result-display"></div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Custom Picker</h3>
+                    <textarea id="customOptions" placeholder="Enter options, one per line"></textarea>
+                    <button id="pickCustom" class="action-btn">Pick Random</button>
+                    <div id="customResult" class="result-display"></div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Wheel of Fortune</h3>
+                    <div class="wheel-container">
+                        <canvas id="wheelCanvas" width="300" height="300"></canvas>
+                        <div class="wheel-pointer"></div>
+                    </div>
+                    <button id="spinWheel" class="action-btn">Spin Wheel</button>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Tap to Choose</h3>
+                    <p>Tap with fingers to randomly select</p>
+                    <div id="tapArea" class="tap-area">
+                        <div class="circle" data-value="1"></div>
+                        <div class="circle" data-value="2"></div>
+                        <div class="circle" data-value="3"></div>
+                        <div class="circle" data-value="4"></div>
+                        <div class="circle" data-value="5"></div>
+                    </div>
+                    <div id="tapResult" class="result-display"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="predictions">
+            <h2>Predictions & Probability</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Try Your Luck</h3>
+                    <p>Test your luck with success/failure streaks</p>
+                    <button id="tryLuck" class="action-btn">Try Your Luck</button>
+                    <div id="luckResult" class="result-display"></div>
+                    <div id="streakCounter">Current Streak: 0</div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Monty Hall Problem</h3>
+                    <p>Classic probability puzzle</p>
+                    <div class="monty-doors">
+                        <div class="door" data-door="1">🚪 1</div>
+                        <div class="door" data-door="2">🚪 2</div>
+                        <div class="door" data-door="3">🚪 3</div>
+                    </div>
+                    <div class="monty-controls">
+                        <button id="startMonty" class="action-btn">Start Game</button>
+                        <button id="switchDoor" class="action-btn" disabled>Switch Door</button>
+                        <button id="stayDoor" class="action-btn" disabled>Stay</button>
+                    </div>
+                    <div id="montyResult" class="result-display"></div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Random Time Limits</h3>
+                    <div class="time-controls">
+                        <button id="singleRandomTime" class="action-btn">Single Random Time</button>
+                        <button id="multiRandomTime" class="action-btn">Multiple Random Times</button>
+                    </div>
+                    <div id="timeResult" class="result-display"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="games">
+            <h2>Games & Puzzles</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Team Decider</h3>
+                    <p>Split players into teams evenly</p>
+                    <textarea id="playerNames" placeholder="Enter player names, one per line"></textarea>
+                    <input type="number" id="teamCount" min="2" max="6" value="2" placeholder="Number of teams">
+                    <button id="splitTeams" class="action-btn">Split Teams</button>
+                    <div id="teamResult" class="result-display"></div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Number Puzzles</h3>
+                    <p>Solve mathematical puzzles</p>
+                    <div id="puzzleDisplay" class="puzzle-display"></div>
+                    <input type="number" id="puzzleAnswer" placeholder="Your answer">
+                    <button id="checkPuzzle" class="action-btn">Check Answer</button>
+                    <div id="puzzleResult" class="result-display"></div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Riddles</h3>
+                    <p>Challenge your mind with riddles</p>
+                    <div id="riddleDisplay" class="riddle-display"></div>
+                    <button id="newRiddle" class="action-btn">New Riddle</button>
+                    <button id="showRiddleAnswer" class="action-btn">Show Answer</button>
+                    <div id="riddleAnswer" class="result-display"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="stats">
+            <h2>Statistics & AI Analysis</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Custom Stat AI</h3>
+                    <p>Enter numbers for statistical analysis</p>
+                    <textarea id="numberInput" placeholder="Enter numbers separated by commas"></textarea>
+                    <button id="analyzeStats" class="action-btn">Analyze</button>
+                    <div id="statsResult" class="result-display"></div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Probability Calculator</h3>
+                    <p>Calculate complex probabilities</p>
+                    <input type="text" id="probabilityInput" placeholder="e.g., 1/6 * 1/6">
+                    <button id="calculateProbability" class="action-btn">Calculate</button>
+                    <div id="probabilityResult" class="result-display"></div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Decision Helper</h3>
+                    <p>Weigh pros and cons of decisions</p>
+                    <div class="decision-inputs">
+                        <textarea id="prosList" placeholder="Pros..."></textarea>
+                        <textarea id="consList" placeholder="Cons..."></textarea>
+                    </div>
+                    <button id="analyzeDecision" class="action-btn">Analyze Decision</button>
+                    <div id="decisionResult" class="result-display"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
