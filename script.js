@@ -1,28 +1,8 @@
 // Tab Navigation
 document.addEventListener('DOMContentLoaded', function() {
-    // Tab switching functionality
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
-    
-    tabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const tabId = btn.getAttribute('data-tab');
-            
-            // Update active tab button
-            tabBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            // Show active tab content
-            tabContents.forEach(content => {
-                content.classList.remove('active');
-                if (content.id === tabId) {
-                    content.classList.add('active');
-                }
-            });
-        });
-    });
-    
-    // Initialize features
+    // Initialize all components
+    initNavigation();
+    initDashboard();
     initFiftyFifty();
     initCustomPicker();
     initWheel();
@@ -38,6 +18,57 @@ document.addEventListener('DOMContentLoaded', function() {
     initDecisionHelper();
 });
 
+// Navigation
+function initNavigation() {
+    const navItems = document.querySelectorAll('.nav-item');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    navItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const tabId = item.getAttribute('data-tab');
+            
+            // Update active nav item
+            navItems.forEach(nav => nav.classList.remove('active'));
+            item.classList.add('active');
+            
+            // Show active tab content
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === tabId) {
+                    content.classList.add('active');
+                }
+            });
+        });
+    });
+    
+    // Dashboard buttons to navigate to other tabs
+    document.querySelectorAll('.stat-actions .btn-primary').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabId = btn.getAttribute('data-tab');
+            document.querySelector(`.nav-item[data-tab="${tabId}"]`).click();
+        });
+    });
+}
+
+// Dashboard
+function initDashboard() {
+    // Update activity with real data
+    updateActivity();
+}
+
+function updateActivity() {
+    // In a real app, this would fetch from a backend
+    const activities = [
+        { type: 'coin', result: 'Heads', time: '2 minutes ago' },
+        { type: 'dice', result: '4', time: '15 minutes ago' },
+        { type: 'stats', result: 'Analysis completed', time: '1 hour ago' },
+        { type: 'custom', result: 'Option selected', time: '3 hours ago' }
+    ];
+    
+    // This would be implemented to update the activity list
+}
+
 // 50/50 Chance Functions
 function initFiftyFifty() {
     const coinFlipBtn = document.getElementById('coinFlip');
@@ -47,20 +78,20 @@ function initFiftyFifty() {
     
     coinFlipBtn.addEventListener('click', () => {
         const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
-        resultDisplay.textContent = `Coin Flip: ${result}`;
-        resultDisplay.style.background = '#e8f5e9';
+        animateResult(resultDisplay, `Coin Flip: <strong>${result}</strong>`);
+        logActivity('coin', result);
     });
     
     diceRollBtn.addEventListener('click', () => {
         const result = Math.floor(Math.random() * 6) + 1;
-        resultDisplay.textContent = `Dice Roll: ${result}`;
-        resultDisplay.style.background = '#e3f2fd';
+        animateResult(resultDisplay, `Dice Roll: <strong>${result}</strong>`);
+        logActivity('dice', result);
     });
     
     yesNoBtn.addEventListener('click', () => {
         const result = Math.random() < 0.5 ? 'Yes' : 'No';
-        resultDisplay.textContent = `Answer: ${result}`;
-        resultDisplay.style.background = '#fff3e0';
+        animateResult(resultDisplay, `Answer: <strong>${result}</strong>`);
+        logActivity('yesno', result);
     });
 }
 
@@ -74,16 +105,15 @@ function initCustomPicker() {
         const options = optionsText.split('\n').filter(opt => opt.trim() !== '');
         
         if (options.length === 0) {
-            resultDisplay.textContent = 'Please enter some options first.';
-            resultDisplay.style.background = '#ffebee';
+            animateResult(resultDisplay, 'Please enter some options first.', 'error');
             return;
         }
         
         const randomIndex = Math.floor(Math.random() * options.length);
         const selected = options[randomIndex];
         
-        resultDisplay.textContent = `Selected: ${selected}`;
-        resultDisplay.style.background = '#e8f5e9';
+        animateResult(resultDisplay, `Selected: <strong>${selected}</strong>`);
+        logActivity('custom', selected);
     });
 }
 
@@ -138,6 +168,7 @@ function initWheel() {
     }
     
     spinBtn.addEventListener('click', () => {
+        spinBtn.disabled = true;
         const spins = 5 + Math.random() * 5; // 5-10 spins
         const degrees = spins * 360;
         const randomOffset = Math.random() * 360;
@@ -153,12 +184,15 @@ function initWheel() {
             const sliceAngle = 360 / options.length;
             const selectedIndex = Math.floor((360 - normalizedRotation) / sliceAngle) % options.length;
             
-            alert(`Wheel selected: ${options[selectedIndex]}`);
+            // Show result in a more elegant way
+            showNotification(`Wheel selected: ${options[selectedIndex]}`, 'success');
+            logActivity('wheel', options[selectedIndex]);
             
             // Reset for next spin
             setTimeout(() => {
                 canvas.style.transition = 'none';
                 canvas.style.transform = 'rotate(0deg)';
+                spinBtn.disabled = false;
             }, 100);
         }, 4000);
     });
@@ -181,8 +215,8 @@ function initTapArea() {
             circle.classList.add('selected');
             
             // Show result
-            resultDisplay.textContent = `Selected area: ${circle.getAttribute('data-value')}`;
-            resultDisplay.style.background = '#e3f2fd';
+            animateResult(resultDisplay, `Selected area: <strong>${circle.getAttribute('data-value')}</strong>`);
+            logActivity('tap', circle.getAttribute('data-value'));
         });
     });
 }
@@ -204,15 +238,20 @@ function initTryYourLuck() {
         if (success) {
             streak++;
             successCount++;
-            resultDisplay.textContent = "Success! 🎉";
-            resultDisplay.style.background = '#e8f5e9';
+            animateResult(resultDisplay, "Success! 🎉", 'success');
         } else {
             streak = 0;
-            resultDisplay.textContent = "Better luck next time! 😔";
-            resultDisplay.style.background = '#ffebee';
+            animateResult(resultDisplay, "Better luck next time! 😔", 'error');
         }
         
-        streakCounter.textContent = `Current Streak: ${streak} | Success Rate: ${((successCount / totalTries) * 100).toFixed(1)}%`;
+        streakCounter.innerHTML = `
+            <div class="streak-info">
+                <span>Current Streak: <strong>${streak}</strong></span>
+                <span>Success Rate: <strong>${((successCount / totalTries) * 100).toFixed(1)}%</strong></span>
+            </div>
+        `;
+        
+        logActivity('luck', success ? 'Success' : 'Failure');
     });
 }
 
@@ -235,6 +274,7 @@ function initMontyHall() {
         door.addEventListener('click', () => {
             if (gameState === 'firstChoice') {
                 playerChoice = parseInt(door.getAttribute('data-door'));
+                doors.forEach(d => d.classList.remove('selected'));
                 door.classList.add('selected');
                 revealGoatDoor();
             }
@@ -251,11 +291,10 @@ function initMontyHall() {
         doors.forEach(door => {
             door.classList.remove('selected', 'revealed');
             door.textContent = `🚪 ${door.getAttribute('data-door')}`;
+            door.style.background = '';
         });
         
-        resultDisplay.textContent = "Choose a door!";
-        resultDisplay.style.background = '#fff3e0';
-        
+        animateResult(resultDisplay, "Choose a door!");
         startBtn.disabled = true;
         switchBtn.disabled = false;
         stayBtn.disabled = false;
@@ -272,7 +311,7 @@ function initMontyHall() {
         document.querySelector(`.door[data-door="${revealedDoor}"]`).textContent = "🐐 Goat";
         
         gameState = 'revealed';
-        resultDisplay.textContent = `I've revealed a goat behind door ${revealedDoor}. Do you want to switch or stay?`;
+        animateResult(resultDisplay, `I've revealed a goat behind door ${revealedDoor}. Do you want to switch or stay?`);
     }
     
     function switchChoice() {
@@ -310,17 +349,17 @@ function initMontyHall() {
         // Show result
         const won = playerChoice === winningDoor;
         if (won) {
-            resultDisplay.textContent = "Congratulations! You won the car! 🎉";
-            resultDisplay.style.background = '#e8f5e9';
+            animateResult(resultDisplay, "Congratulations! You won the car! 🎉", 'success');
         } else {
-            resultDisplay.textContent = "Sorry, you got a goat. Better luck next time!";
-            resultDisplay.style.background = '#ffebee';
+            animateResult(resultDisplay, "Sorry, you got a goat. Better luck next time!", 'error');
         }
         
         // Reset buttons
         startBtn.disabled = false;
         switchBtn.disabled = true;
         stayBtn.disabled = true;
+        
+        logActivity('monty', won ? 'Win' : 'Loss');
     }
 }
 
@@ -335,8 +374,8 @@ function initRandomTime() {
         const minutes = Math.floor(randomSeconds / 60);
         const seconds = randomSeconds % 60;
         
-        resultDisplay.textContent = `Random time: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        resultDisplay.style.background = '#e3f2fd';
+        animateResult(resultDisplay, `Random time: <strong>${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}</strong>`);
+        logActivity('time', `${minutes}:${seconds}`);
     });
     
     multiTimeBtn.addEventListener('click', () => {
@@ -350,8 +389,8 @@ function initRandomTime() {
             times.push(`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
         }
         
-        resultDisplay.innerHTML = `Random times:<br>${times.join('<br>')}`;
-        resultDisplay.style.background = '#e3f2fd';
+        animateResult(resultDisplay, `Random times:<br><strong>${times.join('<br>')}</strong>`);
+        logActivity('time-multi', times.join(', '));
     });
 }
 
@@ -367,8 +406,7 @@ function initTeamDecider() {
         const players = playersText.split('\n').filter(player => player.trim() !== '');
         
         if (players.length === 0) {
-            resultDisplay.textContent = 'Please enter some player names first.';
-            resultDisplay.style.background = '#ffebee';
+            animateResult(resultDisplay, 'Please enter some player names first.', 'error');
             return;
         }
         
@@ -388,8 +426,8 @@ function initTeamDecider() {
             resultHTML += `<strong>Team ${String.fromCharCode(65 + index)}:</strong> ${team.join(', ')}<br>`;
         });
         
-        resultDisplay.innerHTML = resultHTML;
-        resultDisplay.style.background = '#fff3e0';
+        animateResult(resultDisplay, resultHTML);
+        logActivity('teams', `${teamCount} teams created`);
     });
 }
 
@@ -397,6 +435,7 @@ function initTeamDecider() {
 function initPuzzles() {
     const puzzleDisplay = document.getElementById('puzzleDisplay');
     const checkBtn = document.getElementById('checkPuzzle');
+    const newPuzzleBtn = document.getElementById('newPuzzle');
     const resultDisplay = document.getElementById('puzzleResult');
     
     let currentPuzzle = null;
@@ -405,11 +444,11 @@ function initPuzzles() {
     const puzzles = [
         {
             question: "I am an odd number. Take away one letter and I become even. What number am I?",
-            answer: 7
+            answer: "7"
         },
         {
             question: "If you multiply me by any other number, the answer will always be the same. What am I?",
-            answer: 0
+            answer: "0"
         },
         {
             question: "What three positive numbers give the same result when multiplied and added together?",
@@ -424,19 +463,18 @@ function initPuzzles() {
         const userAnswer = document.getElementById('puzzleAnswer').value.trim();
         
         if (!userAnswer) {
-            resultDisplay.textContent = "Please enter an answer.";
-            resultDisplay.style.background = '#ffebee';
+            animateResult(resultDisplay, "Please enter an answer.", 'error');
             return;
         }
         
         if (userAnswer.toLowerCase() === currentAnswer.toString().toLowerCase()) {
-            resultDisplay.textContent = "Correct! 🎉";
-            resultDisplay.style.background = '#e8f5e9';
+            animateResult(resultDisplay, "Correct! 🎉", 'success');
         } else {
-            resultDisplay.textContent = "Incorrect. Try again!";
-            resultDisplay.style.background = '#ffebee';
+            animateResult(resultDisplay, "Incorrect. Try again!", 'error');
         }
     });
+    
+    newPuzzleBtn.addEventListener('click', showRandomPuzzle);
     
     function showRandomPuzzle() {
         const randomIndex = Math.floor(Math.random() * puzzles.length);
@@ -445,7 +483,7 @@ function initPuzzles() {
         
         puzzleDisplay.textContent = currentPuzzle.question;
         document.getElementById('puzzleAnswer').value = '';
-        resultDisplay.textContent = '';
+        resultDisplay.innerHTML = '<i class="fas fa-arrow-right"></i><span>Puzzle feedback will appear here</span>';
     }
 }
 
@@ -484,8 +522,7 @@ function initRiddles() {
     
     showAnswerBtn.addEventListener('click', () => {
         if (currentRiddle) {
-            answerDisplay.textContent = `Answer: ${currentRiddle.answer}`;
-            answerDisplay.style.background = '#e3f2fd';
+            animateResult(answerDisplay, `Answer: <strong>${currentRiddle.answer}</strong>`);
         }
     });
     
@@ -494,7 +531,7 @@ function initRiddles() {
         currentRiddle = riddles[randomIndex];
         
         riddleDisplay.textContent = currentRiddle.question;
-        answerDisplay.textContent = '';
+        answerDisplay.innerHTML = '<i class="fas fa-arrow-right"></i><span>Riddle answer will appear here</span>';
     }
 }
 
@@ -510,8 +547,7 @@ function initStats() {
             .filter(num => !isNaN(num));
         
         if (numbers.length === 0) {
-            resultDisplay.textContent = 'Please enter valid numbers.';
-            resultDisplay.style.background = '#ffebee';
+            animateResult(resultDisplay, 'Please enter valid numbers.', 'error');
             return;
         }
         
@@ -532,7 +568,7 @@ function initStats() {
         const max = Math.max(...numbers);
         const range = max - min;
         
-        resultDisplay.innerHTML = `
+        const resultHTML = `
             <strong>Statistical Analysis:</strong><br>
             Count: ${numbers.length}<br>
             Sum: ${sum.toFixed(2)}<br>
@@ -543,7 +579,9 @@ function initStats() {
             Max: ${max.toFixed(2)}<br>
             Range: ${range.toFixed(2)}
         `;
-        resultDisplay.style.background = '#e8f5e9';
+        
+        animateResult(resultDisplay, resultHTML);
+        logActivity('stats', 'Analysis completed');
     });
 }
 
@@ -556,14 +594,12 @@ function initProbability() {
         const input = document.getElementById('probabilityInput').value.trim();
         
         if (!input) {
-            resultDisplay.textContent = 'Please enter a probability expression.';
-            resultDisplay.style.background = '#ffebee';
+            animateResult(resultDisplay, 'Please enter a probability expression.', 'error');
             return;
         }
         
         try {
             // Simple probability expression evaluator
-            // Note: This is a simplified version - a real app would need more robust parsing
             let expression = input;
             
             // Replace fractions
@@ -578,16 +614,17 @@ function initProbability() {
             
             const percentage = (result * 100).toFixed(2);
             
-            resultDisplay.innerHTML = `
+            const resultHTML = `
                 <strong>Probability Calculation:</strong><br>
                 Expression: ${input}<br>
                 Result: ${result.toFixed(4)}<br>
                 Percentage: ${percentage}%
             `;
-            resultDisplay.style.background = '#e3f2fd';
+            
+            animateResult(resultDisplay, resultHTML);
+            logActivity('probability', `${input} = ${result}`);
         } catch (error) {
-            resultDisplay.textContent = 'Error: Please enter a valid probability expression (e.g., "1/6 * 1/6").';
-            resultDisplay.style.background = '#ffebee';
+            animateResult(resultDisplay, 'Error: Please enter a valid probability expression (e.g., "1/6 * 1/6").', 'error');
         }
     });
 }
@@ -605,8 +642,7 @@ function initDecisionHelper() {
         const cons = consText.split('\n').filter(con => con.trim() !== '');
         
         if (pros.length === 0 && cons.length === 0) {
-            resultDisplay.textContent = 'Please enter some pros and/or cons.';
-            resultDisplay.style.background = '#ffebee';
+            animateResult(resultDisplay, 'Please enter some pros and/or cons.', 'error');
             return;
         }
         
@@ -614,27 +650,108 @@ function initDecisionHelper() {
         const conCount = cons.length;
         
         let recommendation = '';
+        let type = 'info';
+        
         if (proCount > conCount) {
             recommendation = 'Based on your pros and cons, it seems like a GOOD decision.';
+            type = 'success';
         } else if (conCount > proCount) {
             recommendation = 'Based on your pros and cons, it seems like a BAD decision.';
+            type = 'error';
         } else {
             recommendation = 'It\'s a balanced decision. Consider the weight of each pro and con.';
         }
         
-        resultDisplay.innerHTML = `
+        const resultHTML = `
             <strong>Decision Analysis:</strong><br>
             Pros: ${proCount}<br>
             Cons: ${conCount}<br>
             <strong>${recommendation}</strong>
         `;
         
-        if (proCount > conCount) {
-            resultDisplay.style.background = '#e8f5e9';
-        } else if (conCount > proCount) {
-            resultDisplay.style.background = '#ffebee';
-        } else {
-            resultDisplay.style.background = '#fff3e0';
-        }
+        animateResult(resultDisplay, resultHTML, type);
+        logActivity('decision', `${proCount} pros, ${conCount} cons`);
     });
+}
+
+// Utility Functions
+function animateResult(element, content, type = 'info') {
+    element.style.opacity = '0';
+    element.style.transform = 'translateY(10px)';
+    
+    setTimeout(() => {
+        element.innerHTML = `<i class="fas fa-arrow-right"></i>${content}`;
+        
+        // Reset styles
+        element.style.borderLeftColor = '';
+        element.style.background = '';
+        
+        // Apply type-specific styles
+        if (type === 'success') {
+            element.style.borderLeftColor = '#4caf50';
+            element.style.background = '#e8f5e9';
+        } else if (type === 'error') {
+            element.style.borderLeftColor = '#f44336';
+            element.style.background = '#ffebee';
+        } else if (type === 'warning') {
+            element.style.borderLeftColor = '#ff9800';
+            element.style.background = '#fff3e0';
+        }
+        
+        element.style.opacity = '1';
+        element.style.transform = 'translateY(0)';
+    }, 300);
+}
+
+function showNotification(message, type = 'info') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+        <span>${message}</span>
+    `;
+    
+    // Add styles
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'success' ? '#4caf50' : '#2196f3'};
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Animate in
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
+
+function logActivity(type, result) {
+    // In a real app, this would send data to a backend
+    console.log(`Activity: ${type} - ${result}`);
+    
+    // Update the status counter
+    const statusValue = document.querySelector('.status-item:first-child .status-value');
+    const currentCount = parseInt(statusValue.textContent.replace(',', ''));
+    statusValue.textContent = (currentCount + 1).toLocaleString();
 }

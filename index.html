@@ -3,171 +3,495 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Decider - Statistical & Prediction App</title>
+    <title>Decider Pro | Statistical & Prediction App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Decider</h1>
-            <p class="tagline">Your statistical companion for decisions and predictions</p>
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-dice-d20"></i>
+                    <h1>Decider<span class="pro">Pro</span></h1>
+                </div>
+                <p class="tagline">Advanced statistical analysis & prediction engine</p>
+            </div>
         </header>
 
-        <div class="nav-tabs">
-            <button class="tab-btn active" data-tab="randomizers">Randomizers</button>
-            <button class="tab-btn" data-tab="predictions">Predictions</button>
-            <button class="tab-btn" data-tab="games">Games & Puzzles</button>
-            <button class="tab-btn" data-tab="stats">Statistics & AI</button>
-        </div>
-
-        <div class="tab-content active" id="randomizers">
-            <h2>Random Choice Tools</h2>
-            
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>50/50 Chance</h3>
-                    <div class="option-buttons">
-                        <button id="coinFlip" class="action-btn">Coin Flip</button>
-                        <button id="diceRoll" class="action-btn">Dice Roll</button>
-                        <button id="yesNo" class="action-btn">Yes/No</button>
+        <div class="app-container">
+            <div class="sidebar">
+                <div class="user-profile">
+                    <div class="avatar">
+                        <i class="fas fa-user"></i>
                     </div>
-                    <div id="fiftyFiftyResult" class="result-display"></div>
+                    <div class="user-info">
+                        <span class="username">Decision Maker</span>
+                        <span class="user-status">Ready to analyze</span>
+                    </div>
                 </div>
 
-                <div class="feature-card">
-                    <h3>Custom Picker</h3>
-                    <textarea id="customOptions" placeholder="Enter options, one per line"></textarea>
-                    <button id="pickCustom" class="action-btn">Pick Random</button>
-                    <div id="customResult" class="result-display"></div>
-                </div>
+                <nav class="nav-menu">
+                    <a href="#" class="nav-item active" data-tab="dashboard">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="nav-item" data-tab="randomizers">
+                        <i class="fas fa-random"></i>
+                        <span>Randomizers</span>
+                    </a>
+                    <a href="#" class="nav-item" data-tab="predictions">
+                        <i class="fas fa-crystal-ball"></i>
+                        <span>Predictions</span>
+                    </a>
+                    <a href="#" class="nav-item" data-tab="games">
+                        <i class="fas fa-puzzle-piece"></i>
+                        <span>Games & Puzzles</span>
+                    </a>
+                    <a href="#" class="nav-item" data-tab="stats">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Statistics & AI</span>
+                    </a>
+                </nav>
 
-                <div class="feature-card">
-                    <h3>Wheel of Fortune</h3>
-                    <div class="wheel-container">
-                        <canvas id="wheelCanvas" width="300" height="300"></canvas>
-                        <div class="wheel-pointer"></div>
+                <div class="app-status">
+                    <div class="status-item">
+                        <span class="status-label">Decisions Made</span>
+                        <span class="status-value">1,247</span>
                     </div>
-                    <button id="spinWheel" class="action-btn">Spin Wheel</button>
-                </div>
-
-                <div class="feature-card">
-                    <h3>Tap to Choose</h3>
-                    <p>Tap with fingers to randomly select</p>
-                    <div id="tapArea" class="tap-area">
-                        <div class="circle" data-value="1"></div>
-                        <div class="circle" data-value="2"></div>
-                        <div class="circle" data-value="3"></div>
-                        <div class="circle" data-value="4"></div>
-                        <div class="circle" data-value="5"></div>
+                    <div class="status-item">
+                        <span class="status-label">Accuracy</span>
+                        <span class="status-value">94.3%</span>
                     </div>
-                    <div id="tapResult" class="result-display"></div>
                 </div>
             </div>
-        </div>
 
-        <div class="tab-content" id="predictions">
-            <h2>Predictions & Probability</h2>
-            
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>Try Your Luck</h3>
-                    <p>Test your luck with success/failure streaks</p>
-                    <button id="tryLuck" class="action-btn">Try Your Luck</button>
-                    <div id="luckResult" class="result-display"></div>
-                    <div id="streakCounter">Current Streak: 0</div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>Monty Hall Problem</h3>
-                    <p>Classic probability puzzle</p>
-                    <div class="monty-doors">
-                        <div class="door" data-door="1">🚪 1</div>
-                        <div class="door" data-door="2">🚪 2</div>
-                        <div class="door" data-door="3">🚪 3</div>
+            <main class="main-content">
+                <!-- Dashboard Tab -->
+                <div class="tab-content active" id="dashboard">
+                    <div class="tab-header">
+                        <h2>Decision Dashboard</h2>
+                        <p>Overview of your statistical tools and recent activity</p>
                     </div>
-                    <div class="monty-controls">
-                        <button id="startMonty" class="action-btn">Start Game</button>
-                        <button id="switchDoor" class="action-btn" disabled>Switch Door</button>
-                        <button id="stayDoor" class="action-btn" disabled>Stay</button>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-dice"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Randomizers</h3>
+                                <p>Coin flips, dice rolls & custom pickers</p>
+                            </div>
+                            <div class="stat-actions">
+                                <button class="btn-primary" data-tab="randomizers">Explore</button>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Predictions</h3>
+                                <p>Probability models & forecasting</p>
+                            </div>
+                            <div class="stat-actions">
+                                <button class="btn-primary" data-tab="predictions">Explore</button>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>AI Analysis</h3>
+                                <p>Smart statistical insights</p>
+                            </div>
+                            <div class="stat-actions">
+                                <button class="btn-primary" data-tab="stats">Explore</button>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-gamepad"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Games & Puzzles</h3>
+                                <p>Interactive challenges</p>
+                            </div>
+                            <div class="stat-actions">
+                                <button class="btn-primary" data-tab="games">Explore</button>
+                            </div>
+                        </div>
                     </div>
-                    <div id="montyResult" class="result-display"></div>
-                </div>
 
-                <div class="feature-card">
-                    <h3>Random Time Limits</h3>
-                    <div class="time-controls">
-                        <button id="singleRandomTime" class="action-btn">Single Random Time</button>
-                        <button id="multiRandomTime" class="action-btn">Multiple Random Times</button>
+                    <div class="recent-activity">
+                        <h3>Recent Activity</h3>
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <div class="activity-icon success">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <p>Coin flip: Heads</p>
+                                    <span>2 minutes ago</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon warning">
+                                    <i class="fas fa-dice"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <p>Dice roll: 4</p>
+                                    <span>15 minutes ago</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon primary">
+                                    <i class="fas fa-chart-pie"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <p>Statistical analysis completed</p>
+                                    <span>1 hour ago</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div id="timeResult" class="result-display"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="tab-content" id="games">
-            <h2>Games & Puzzles</h2>
-            
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>Team Decider</h3>
-                    <p>Split players into teams evenly</p>
-                    <textarea id="playerNames" placeholder="Enter player names, one per line"></textarea>
-                    <input type="number" id="teamCount" min="2" max="6" value="2" placeholder="Number of teams">
-                    <button id="splitTeams" class="action-btn">Split Teams</button>
-                    <div id="teamResult" class="result-display"></div>
                 </div>
 
-                <div class="feature-card">
-                    <h3>Number Puzzles</h3>
-                    <p>Solve mathematical puzzles</p>
-                    <div id="puzzleDisplay" class="puzzle-display"></div>
-                    <input type="number" id="puzzleAnswer" placeholder="Your answer">
-                    <button id="checkPuzzle" class="action-btn">Check Answer</button>
-                    <div id="puzzleResult" class="result-display"></div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>Riddles</h3>
-                    <p>Challenge your mind with riddles</p>
-                    <div id="riddleDisplay" class="riddle-display"></div>
-                    <button id="newRiddle" class="action-btn">New Riddle</button>
-                    <button id="showRiddleAnswer" class="action-btn">Show Answer</button>
-                    <div id="riddleAnswer" class="result-display"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="tab-content" id="stats">
-            <h2>Statistics & AI Analysis</h2>
-            
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>Custom Stat AI</h3>
-                    <p>Enter numbers for statistical analysis</p>
-                    <textarea id="numberInput" placeholder="Enter numbers separated by commas"></textarea>
-                    <button id="analyzeStats" class="action-btn">Analyze</button>
-                    <div id="statsResult" class="result-display"></div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>Probability Calculator</h3>
-                    <p>Calculate complex probabilities</p>
-                    <input type="text" id="probabilityInput" placeholder="e.g., 1/6 * 1/6">
-                    <button id="calculateProbability" class="action-btn">Calculate</button>
-                    <div id="probabilityResult" class="result-display"></div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>Decision Helper</h3>
-                    <p>Weigh pros and cons of decisions</p>
-                    <div class="decision-inputs">
-                        <textarea id="prosList" placeholder="Pros..."></textarea>
-                        <textarea id="consList" placeholder="Cons..."></textarea>
+                <!-- Randomizers Tab -->
+                <div class="tab-content" id="randomizers">
+                    <div class="tab-header">
+                        <h2>Random Choice Tools</h2>
+                        <p>Make random selections with various methods</p>
                     </div>
-                    <button id="analyzeDecision" class="action-btn">Analyze Decision</button>
-                    <div id="decisionResult" class="result-display"></div>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <div class="card-header">
+                                <i class="fas fa-coins"></i>
+                                <h3>50/50 Chance</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Simple probability tests</p>
+                                <div class="option-buttons">
+                                    <button class="btn-outline" id="coinFlip">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                        Coin Flip
+                                    </button>
+                                    <button class="btn-outline" id="diceRoll">
+                                        <i class="fas fa-dice"></i>
+                                        Dice Roll
+                                    </button>
+                                    <button class="btn-outline" id="yesNo">
+                                        <i class="fas fa-question"></i>
+                                        Yes/No
+                                    </button>
+                                </div>
+                                <div id="fiftyFiftyResult" class="result-display">
+                                    <i class="fas fa-arrow-right"></i>
+                                    <span>Result will appear here</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="card-header">
+                                <i class="fas fa-list"></i>
+                                <h3>Custom Picker</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Enter your own options</p>
+                                <textarea id="customOptions" placeholder="Enter options, one per line&#10;Option 1&#10;Option 2&#10;Option 3"></textarea>
+                                <button class="btn-primary" id="pickCustom">
+                                    <i class="fas fa-random"></i>
+                                    Pick Random
+                                </button>
+                                <div id="customResult" class="result-display">
+                                    <i class="fas fa-arrow-right"></i>
+                                    <span>Selection will appear here</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="card-header">
+                                <i class="fas fa-compass"></i>
+                                <h3>Wheel of Fortune</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Spin for a random selection</p>
+                                <div class="wheel-container">
+                                    <canvas id="wheelCanvas" width="300" height="300"></canvas>
+                                    <div class="wheel-pointer"></div>
+                                </div>
+                                <button class="btn-primary" id="spinWheel">
+                                    <i class="fas fa-redo"></i>
+                                    Spin Wheel
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="card-header">
+                                <i class="fas fa-hand-pointer"></i>
+                                <h3>Tap to Choose</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Tap circles to randomly select</p>
+                                <div id="tapArea" class="tap-area">
+                                    <div class="circle" data-value="1"></div>
+                                    <div class="circle" data-value="2"></div>
+                                    <div class="circle" data-value="3"></div>
+                                    <div class="circle" data-value="4"></div>
+                                    <div class="circle" data-value="5"></div>
+                                </div>
+                                <div id="tapResult" class="result-display">
+                                    <i class="fas fa-arrow-right"></i>
+                                    <span>Selected area will appear here</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+                <!-- Predictions Tab -->
+                <div class="tab-content" id="predictions">
+                    <div class="tab-header">
+                        <h2>Predictions & Probability</h2>
+                        <p>Test probabilities and explore prediction models</p>
+                    </div>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <div class="card-header">
+                                <i class="fas fa-star"></i>
+                                <h3>Try Your Luck</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Test your success/failure streaks</p>
+                                <button class="btn-primary" id="tryLuck">
+                                    <i class="fas fa-dice"></i>
+                                    Try Your Luck
+                                </button>
+                                <div id="luckResult" class="result-display">
+                                    <i class="fas fa-arrow-right"></i>
+                                    <span>Luck result will appear here</span>
+                                </div>
+                                <div id="streakCounter" class="streak-counter">
+                                    <div class="streak-info">
+                                        <span>Current Streak: <strong>0</strong></span>
+                                        <span>Success Rate: <strong>0%</strong></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="card-header">
+                                <i class="fas fa-door-open"></i>
+                                <h3>Monty Hall Problem</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Classic probability puzzle</p>
+                                <div class="monty-doors">
+                                    <div class="door" data-door="1">🚪 1</div>
+                                    <div class="door" data-door="2">🚪 2</div>
+                                    <div class="door" data-door="3">🚪 3</div>
+                                </div>
+                                <div class="monty-controls">
+                                    <button class="btn-outline" id="startMonty">Start Game</button>
+                                    <button class="btn-primary" id="switchDoor" disabled>Switch Door</button>
+                                    <button class="btn-outline" id="stayDoor" disabled>Stay</button>
+                                </div>
+                                <div id="montyResult" class="result-display">
+                                    <i class="fas fa-arrow-right"></i>
+                                    <span>Game instructions will appear here</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="card-header">
+                                <i class="fas fa-clock"></i>
+                                <h3>Random Time Limits</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Generate random time intervals</p>
+                                <div class="time-controls">
+                                    <button class="btn-outline" id="singleRandomTime">
+                                        <i class="fas fa-clock"></i>
+                                        Single Random Time
+                                    </button>
+                                    <button class="btn-primary" id="multiRandomTime">
+                                        <i class="fas fa-clone"></i>
+                                        Multiple Times
+                                    </button>
+                                </div>
+                                <div id="timeResult" class="result-display">
+                                    <i class="fas fa-arrow-right"></i>
+                                    <span>Time results will appear here</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Games & Puzzles Tab -->
+                <div class="tab-content" id="games">
+                    <div class="tab-header">
+                        <h2>Games & Puzzles</h2>
+                        <p>Challenge your mind with interactive games</p>
+                    </div>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <div class="card-header">
+                                <i class="fas fa-users"></i>
+                                <h3>Team Decider</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Split players into teams evenly</p>
+                                <textarea id="playerNames" placeholder="Enter player names, one per line&#10;Player 1&#10;Player 2&#10;Player 3"></textarea>
+                                <div class="input-group">
+                                    <label for="teamCount">Number of teams:</label>
+                                    <input type="number" id="teamCount" min="2" max="6" value="2">
+                                </div>
+                                <button class="btn-primary" id="splitTeams">
+                                    <i class="fas fa-code-branch"></i>
+                                    Split Teams
+                                </button>
+                                <div id="teamResult" class="result-display">
+                                    <i class="fas fa-arrow-right"></i>
+                                    <span>Team assignments will appear here</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="card-header">
+                                <i class="fas fa-puzzle-piece"></i>
+                                <h3>Number Puzzles</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Solve mathematical puzzles</p>
+                                <div id="puzzleDisplay" class="puzzle-display">
+                                    Click "New Puzzle" to start
+                                </div>
+                                <div class="input-group">
+                                    <input type="text" id="puzzleAnswer" placeholder="Your answer">
+                                    <button class="btn-primary" id="checkPuzzle">Check</button>
+                                </div>
+                                <button class="btn-outline" id="newPuzzle">New Puzzle</button>
+                                <div id="puzzleResult" class="result-display">
+                                    <i class="fas fa-arrow-right"></i>
+                                    <span>Puzzle feedback will appear here</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="card-header">
+                                <i class="fas fa-brain"></i>
+                                <h3>Riddles</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Challenge your mind with riddles</p>
+                                <div id="riddleDisplay" class="riddle-display">
+                                    Click "New Riddle" to start
+                                </div>
+                                <div class="button-group">
+                                    <button class="btn-outline" id="newRiddle">New Riddle</button>
+                                    <button class="btn-primary" id="showRiddleAnswer">Show Answer</button>
+                                </div>
+                                <div id="riddleAnswer" class="result-display">
+                                    <i class="fas fa-arrow-right"></i>
+                                    <span>Riddle answer will appear here</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistics & AI Tab -->
+                <div class="tab-content" id="stats">
+                    <div class="tab-header">
+                        <h2>Statistics & AI Analysis</h2>
+                        <p>Advanced statistical tools and AI-powered insights</p>
+                    </div>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <div class="card-header">
+                                <i class="fas fa-calculator"></i>
+                                <h3>Custom Stat AI</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Enter numbers for statistical analysis</p>
+                                <textarea id="numberInput" placeholder="Enter numbers separated by commas&#10;Example: 5, 10, 15, 20, 25"></textarea>
+                                <button class="btn-primary" id="analyzeStats">
+                                    <i class="fas fa-chart-bar"></i>
+                                    Analyze
+                                </button>
+                                <div id="statsResult" class="result-display">
+                                    <i class="fas fa-arrow-right"></i>
+                                    <span>Analysis results will appear here</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="card-header">
+                                <i class="fas fa-percentage"></i>
+                                <h3>Probability Calculator</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Calculate complex probabilities</p>
+                                <input type="text" id="probabilityInput" placeholder="e.g., 1/6 * 1/6">
+                                <button class="btn-primary" id="calculateProbability">
+                                    <i class="fas fa-calculator"></i>
+                                    Calculate
+                                </button>
+                                <div id="probabilityResult" class="result-display">
+                                    <i class="fas fa-arrow-right"></i>
+                                    <span>Probability result will appear here</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="card-header">
+                                <i class="fas fa-balance-scale"></i>
+                                <h3>Decision Helper</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Weigh pros and cons of decisions</p>
+                                <div class="decision-inputs">
+                                    <div class="input-group">
+                                        <label for="prosList">Pros</label>
+                                        <textarea id="prosList" placeholder="List pros here..."></textarea>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="consList">Cons</label>
+                                        <textarea id="consList" placeholder="List cons here..."></textarea>
+                                    </div>
+                                </div>
+                                <button class="btn-primary" id="analyzeDecision">
+                                    <i class="fas fa-balance-scale"></i>
+                                    Analyze Decision
+                                </button>
+                                <div id="decisionResult" class="result-display">
+                                    <i class="fas fa-arrow-right"></i>
+                                    <span>Decision analysis will appear here</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
 
